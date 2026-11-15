@@ -26,6 +26,17 @@ const extractRetryAfterHeader = (
 };
 
 /**
+ * Safely casts an unknown value to a non-null object record if applicable.
+ */
+const asObjectRecord = (
+  value?: unknown
+): Record<string, unknown> | undefined => {
+  return typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)
+    : undefined;
+};
+
+/**
  * Resolves the appropriate error category from status code, options, or range fallbacks.
  */
 const resolveCategory = (
@@ -59,6 +70,62 @@ const resolveCategory = (
 };
 
 /**
+ * Resolves whether an error is retryable based on options or HTTP status codes.
+ */
+const resolveRetryable = (
+  statusCode: number,
+  options?: IMcpToolResultOptions
+): boolean => {
+  return typeof options?.retryable === "boolean"
+    ? options.retryable
+    : RETRYABLE_STATUS_CODES.has(statusCode);
+};
+
+/**
+ * Resolves an actionable recovery hint from options, details, or default dictionary.
+ */
+const resolveRecoveryHint = (
+  category: McpErrorCategory,
+  detailsObj?: Record<string, unknown>,
+  options?: IMcpToolResultOptions
+): string => {
+  if (options?.recoveryHint) {
+    return options.recoveryHint;
+  }
+
+  if (typeof detailsObj?.recoveryHint === "string") {
+    return detailsObj.recoveryHint;
+  }
+
+  return DEFAULT_RECOVERY_HINTS[category];
+};
+
+/**
+ * Resolves retry delay in seconds or timestamp from options, headers, or details.
+ */
+const resolveRetryAfter = (
+  headers?: Record<string, string>,
+  detailsObj?: Record<string, unknown>,
+  options?: IMcpToolResultOptions
+): number | string | undefined => {
+  if (options?.retryAfter !== undefined) {
+    return options.retryAfter;
+  }
+
+  const fromHeader = extractRetryAfterHeader(headers);
+  if (fromHeader !== undefined) {
+    return fromHeader;
+  }
+
+  const detailsVal = detailsObj?.retryAfter;
+  if (typeof detailsVal === "number" || typeof detailsVal === "string") {
+    return detailsVal;
+  }
+
+  return undefined;
+};
+
+/**
  * Resolves structured MCP error metadata for AI agent reasoning and autonomous self-healing.
  *
  * @param {number} statusCode - HTTP status code.
@@ -82,30 +149,10 @@ export const resolveErrorMeta = (
   options?: IMcpToolResultOptions
 ): IMcpErrorMeta => {
   const category = resolveCategory(statusCode, options);
-
-  const retryable =
-    typeof options?.retryable === "boolean"
-      ? options.retryable
-      : RETRYABLE_STATUS_CODES.has(statusCode);
-
-  const detailsObj =
-    typeof details === "object" && details !== null
-      ? (details as Record<string, unknown>)
-      : undefined;
-
-  const recoveryHint =
-    options?.recoveryHint ??
-    (typeof detailsObj?.recoveryHint === "string"
-      ? (detailsObj.recoveryHint as string)
-      : DEFAULT_RECOVERY_HINTS[category]);
-
-  const retryAfter =
-    options?.retryAfter ??
-    extractRetryAfterHeader(headers) ??
-    (typeof detailsObj?.retryAfter === "number" ||
-    typeof detailsObj?.retryAfter === "string"
-      ? (detailsObj.retryAfter as number | string)
-      : undefined);
+  const detailsObj = asObjectRecord(details);
+  const retryable = resolveRetryable(statusCode, options);
+  const recoveryHint = resolveRecoveryHint(category, detailsObj, options);
+  const retryAfter = resolveRetryAfter(headers, detailsObj, options);
 
   const meta: IMcpErrorMeta = {
     category,
@@ -120,4 +167,3 @@ export const resolveErrorMeta = (
 
   return meta;
 };
-
