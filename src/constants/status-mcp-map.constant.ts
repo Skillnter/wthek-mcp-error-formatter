@@ -5,6 +5,13 @@ import { MCP_ERROR_CODES } from "./mcp-error-codes.constant";
 /**
  * HTTP error range boundaries for status code classification.
  * @constant
+ *
+ * @example
+ * ```typescript
+ * import { ClassLimits } from "@wthek/mcp-error-formatter";
+ *
+ * const isClient = code >= ClassLimits.ClientError.min && code <= ClassLimits.ClientError.max;
+ * ```
  */
 export const ClassLimits = {
   ClientError: {

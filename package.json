@@ -1,6 +1,6 @@
 {
   "name": "@wthek/mcp-error-formatter",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Model Context Protocol (MCP) error formatter and tool response mapper for http-error-kit. Formats KitHttpError instances and validation errors into standard MCP tool and JSON-RPC error responses.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,6 +33,14 @@
     "mcp-tool-error",
     "mcp-error-formatter",
     "ai-agent",
+    "agent-skill",
+    "antigravity",
+    "cursor",
+    "copilot",
+    "rfc-7807",
+    "rfc-9457",
+    "structured-errors",
+    "api-error-response",
     "http-error-kit",
     "error-handling",
     "error-formatter",
@@ -49,8 +57,8 @@
   },
   "homepage": "https://github.com/Skillnter/wthek-mcp-error-formatter#readme",
   "dependencies": {
-    "http-error-kit": "^1.4.0",
-    "http-response-status-code": "^1.8.0"
+    "http-error-kit": "^1.5.0",
+    "http-response-status-code": "^1.9.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -70,6 +78,7 @@
   "files": [
     "dist/index.js",
     "dist/index.d.ts",
+    "llms.txt",
     "LICENSE"
   ],
   "funding": [

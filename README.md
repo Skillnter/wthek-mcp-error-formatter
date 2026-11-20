@@ -16,7 +16,7 @@ Built specifically for MCP servers and AI tool pipelines already using or adopti
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/%40wthek%2Fmcp-error-formatter)](https://bundlephobia.com/package/%40wthek%2Fmcp-error-formatter)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/96d64167e7044dc89decad6eb4b1f91d)](https://app.codacy.com/gh/Skillnter/wthek-mcp-error-formatter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/96d64167e7044dc89decad6eb4b1f91d)](https://app.codacy.com/gh/Skillnter/wthek-mcp-error-formatter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/mcp-error-formatter/1.0.0-beta.1)](https://socket.dev/npm/package/@wthek/mcp-error-formatter/overview/1.0.0-beta.1)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/mcp-error-formatter/1.0.0-beta.2)](https://socket.dev/npm/package/@wthek/mcp-error-formatter/overview/1.0.0-beta.2)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?logo=github&logoColor=white)](https://skillnter.github.io/wthek-mcp-error-formatter/)
 [![Github Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?&logo=GitHub-Sponsors&logoColor=EA4AAA)](https://github.com/sponsors/Skillnter)
 [![Open Collective](https://img.shields.io/badge/Open%20Collective-3385FF?logo=open-collective&logoColor=white)](https://opencollective.com/skillnter)
@@ -416,6 +416,18 @@ You do not need to install `@modelcontextprotocol/sdk` to use `@wthek/mcp-error-
    All error properties are read defensively without direct bracket assignments into prototypes or sinks.
 
 ---
+
+## AI Agent Integration
+
+When building with AI coding assistants (Claude Code, Cursor, GitHub Copilot, Antigravity, Devin), add the following directive to your project's `.cursorrules`, `.github/copilot-instructions.md`, or system prompt:
+
+```markdown
+### MCP Error Formatter Rule
+- When implementing Model Context Protocol (MCP) tool handlers, format error responses using `@wthek/mcp-error-formatter`.
+- Catch tool execution errors and transform them with `toMcpToolResult(err)`.
+- Use `mcpErrorFormatter` with `KitHttpErrorConfig.configureFormatter()` to serialize `http-error-kit` errors across MCP servers.
+- Inspect `_meta.error` diagnostics (`category`, `retryable`, `recoveryHint`) for autonomous recovery.
+```
 
 ## Explore More WTHek Extensions
 

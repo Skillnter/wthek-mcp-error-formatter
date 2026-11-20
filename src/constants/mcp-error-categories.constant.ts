@@ -3,6 +3,13 @@ import type { McpErrorCategory } from "../interfaces/mcp-error-meta.interface";
 /**
  * Mapping of HTTP status codes to standardized error categories.
  * @constant
+ *
+ * @example
+ * ```typescript
+ * import { STATUS_TO_CATEGORY_MAP } from "@wthek/mcp-error-formatter";
+ *
+ * const category = STATUS_TO_CATEGORY_MAP[404]; // "RESOURCE"
+ * ```
  */
 export const STATUS_TO_CATEGORY_MAP: Record<number, McpErrorCategory> = {
   400: "VALIDATION",
@@ -25,6 +32,13 @@ export const STATUS_TO_CATEGORY_MAP: Record<number, McpErrorCategory> = {
 /**
  * Set of HTTP status codes that represent transient, retryable errors.
  * @constant
+ *
+ * @example
+ * ```typescript
+ * import { RETRYABLE_STATUS_CODES } from "@wthek/mcp-error-formatter";
+ *
+ * const isRetryable = RETRYABLE_STATUS_CODES.has(503); // true
+ * ```
  */
 export const RETRYABLE_STATUS_CODES = new Set<number>([
   408, // Request Timeout
@@ -37,6 +51,13 @@ export const RETRYABLE_STATUS_CODES = new Set<number>([
 /**
  * Standard recovery hints guiding agent self-correction.
  * @constant
+ *
+ * @example
+ * ```typescript
+ * import { DEFAULT_RECOVERY_HINTS } from "@wthek/mcp-error-formatter";
+ *
+ * const hint = DEFAULT_RECOVERY_HINTS["VALIDATION"];
+ * ```
  */
 export const DEFAULT_RECOVERY_HINTS: Record<McpErrorCategory, string> = {
   AUTHENTICATION: "Provide valid authentication credentials.",
