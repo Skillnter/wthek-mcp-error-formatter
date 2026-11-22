@@ -1,6 +1,6 @@
 {
   "name": "@wthek/mcp-error-formatter",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Model Context Protocol (MCP) error formatter and tool response mapper for http-error-kit. Formats KitHttpError instances and validation errors into standard MCP tool and JSON-RPC error responses.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
