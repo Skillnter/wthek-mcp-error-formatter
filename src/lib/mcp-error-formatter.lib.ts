@@ -55,5 +55,13 @@ export const mcpErrorFormatter = (
 
 /**
  * Alias for mcpErrorFormatter adhering to Kit naming convention.
+ *
+ * @example
+ * ```typescript
+ * import { KitHttpErrorConfig } from "http-error-kit";
+ * import { KitMcpErrorFormatter } from "@wthek/mcp-error-formatter";
+ *
+ * KitHttpErrorConfig.configureFormatter(KitMcpErrorFormatter);
+ * ```
  */
 export const KitMcpErrorFormatter = mcpErrorFormatter;

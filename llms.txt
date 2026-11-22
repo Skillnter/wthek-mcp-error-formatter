@@ -1,0 +1,73 @@
+# @wthek/mcp-error-formatter
+
+> Model Context Protocol (MCP) error formatter and tool response mapper for `http-error-kit`.
+
+## Overview
+`@wthek/mcp-error-formatter` formats `KitHttpError` instances, validation errors, and runtime exceptions into standard Model Context Protocol (MCP) tool results and JSON-RPC 2.0 error payloads. It attaches structured `_meta.error` diagnostics (including error categories, recovery hints, retryability flags, and `Retry-After` durations) to equip autonomous AI agents with the diagnostic context required for self-healing and accurate task recovery.
+
+## Installation
+```bash
+npm install @wthek/mcp-error-formatter http-error-kit http-response-status-code
+```
+
+## Quick Start
+
+### 1. Formatting Tool Errors (`toMcpToolResult`)
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { toMcpToolResult } from "@wthek/mcp-error-formatter";
+import { NotFoundError } from "http-error-kit";
+import { z } from "zod";
+
+const server = new McpServer({ name: "my-mcp", version: "1.0.0" });
+
+server.tool(
+  "get_record",
+  { id: z.string() },
+  async ({ id }) => {
+    try {
+      const record = await database.find(id);
+      if (!record) throw new NotFoundError(`Record ${id} not found`);
+      return { content: [{ type: "text", text: JSON.stringify(record) }] };
+    } catch (err) {
+      return toMcpToolResult(err);
+    }
+  }
+);
+```
+
+### 2. Global Kit Formatter Configuration (`mcpErrorFormatter`)
+```typescript
+import { KitHttpErrorConfig } from "http-error-kit";
+import { mcpErrorFormatter } from "@wthek/mcp-error-formatter";
+
+KitHttpErrorConfig.configureFormatter(mcpErrorFormatter);
+```
+
+### 3. Protocol Error Mapping (`toMcpProtocolError`)
+```typescript
+import { toMcpProtocolError } from "@wthek/mcp-error-formatter";
+
+const rpcError = toMcpProtocolError(error);
+// { code: -32602, message: "Invalid params", data: { ... } }
+```
+
+## API Reference
+
+### `toMcpToolResult(error: unknown, options?: IMcpToolResultOptions): IMcpToolResult`
+Converts any caught error into a valid MCP tool result (`{ isError: true, content: [...], _meta: { error: { ... } } }`).
+
+### `mcpErrorFormatter(statusCode: number, message: string, details?: unknown): IMcpErrorPayload`
+Standard formatter function implementing `http-error-kit` `IFormatter`.
+
+### `toMcpProtocolError(error: unknown): IMcpProtocolError`
+Maps caught errors directly to JSON-RPC 2.0 protocol error structures.
+
+### `mapStatusToMcpCode(statusCode: number): number`
+Maps standard HTTP status codes to corresponding JSON-RPC / MCP numeric codes (e.g., 404 -> -32004, 400 -> -32602, 500 -> -32603).
+
+## Safety Rules for AI Agents
+1. Wrap MCP tool execution blocks in `try ... catch` and delegate caught exceptions to `toMcpToolResult(err)`.
+2. Inspect `_meta.error.retryable` and `_meta.error.recoveryHint` in error responses before retrying or escalating failures.
+3. For rate limit errors (`429`), respect `_meta.error.retryAfter` before dispatching subsequent requests.
+
