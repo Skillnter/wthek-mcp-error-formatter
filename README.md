@@ -438,7 +438,7 @@ The WTHek ecosystem continues to grow with new extensions to simplify error hand
 
 - [`http-error-kit`][http-error-kit] – Core library offering structured, extensible HTTP error classes.
 - [`http-response-status-code`][http-response-status-code] – Comprehensive HTTP status codes with descriptions.
-- [`wthek-mcp`][wthek-mcp] – Standalone local MCP server providing HTTP error diagnostic tools for AI coding agents.
+- [`@wthek/mcp`][wthek-mcp] – Standalone local MCP server providing HTTP error diagnostic tools for AI coding agents.
 - [`@wthek/express-middleware`][wthek-express] – Production-safe Express.js error middleware.
 - [`@wthek/fastify-middleware`][wthek-fastify] – Fastify error-handling plugin.
 - [`@wthek/hono-middleware`][wthek-hono] – Lightweight error handling middleware for Hono.
@@ -483,7 +483,7 @@ You can also use the following:
 [himanshu-bansal]: https://github.com/Skillnter
 [http-error-kit]: https://www.npmjs.com/package/http-error-kit
 [http-response-status-code]: https://www.npmjs.com/package/http-response-status-code
-[wthek-mcp]: https://www.npmjs.com/package/wthek-mcp
+[wthek-mcp]: https://www.npmjs.com/package/@wthek/mcp
 [wthek-express]: https://www.npmjs.com/package/@wthek/express-middleware
 [wthek-fastify]: https://www.npmjs.com/package/@wthek/fastify-middleware
 [wthek-hono]: https://www.npmjs.com/package/@wthek/hono-middleware
